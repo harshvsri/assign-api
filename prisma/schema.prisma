@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AssignmentType {
+  CODE
+  TEXT
+}
+
+enum Course {
+  BTECH
+}
+
+enum Branch {
+  CSE
+  CSE_AI
+}
+
+enum Year {
+  YEAR_1
+  YEAR_2
+  YEAR_3
+  YEAR_4
+}
+
+enum Role {
+  STUDENT
+  TEACHER
+}
+
+enum SubjectCode {
+  CS_701
+  CS_702
+  CS_703
+  AS_702
+  CS_751
+  CS_752
+  CS_753
+  CS_754
+  CS_7044
+}
+
+model Teacher {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(TEACHER)
+
+  subjectCode SubjectCode
+  assignments Assignment[]
+}
+
+model Student {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Role     @default(STUDENT)
+
+  course      Course       @default(BTECH)
+  year        Year         @default(YEAR_4)
+  branch      Branch       @default(CSE)
+  assignments Assignment[] @relation("AssignmentToStudent")
+}
+
+model Assignment {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  type      String
+  course    Course   @default(BTECH)
+  year      Year     @default(YEAR_4)
+  branch    Branch   @default(CSE)
+  dueDate   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId String
+  students  Student[] @relation("AssignmentToStudent")
+}
