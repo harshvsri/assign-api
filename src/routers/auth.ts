@@ -1,10 +1,16 @@
 import { Router } from "express";
 import prisma from "../prisma";
 import { comparePassword, createJWT, hashPassword } from "../utils/auth";
+import {
+  validateStudentSignup,
+  validateStudentSignin,
+  validateTeacherSignup,
+  validateTeacherSignin,
+} from "../utils/validation";
 
 const authRouter = Router();
 
-authRouter.post("/student/signup", async (req, res) => {
+authRouter.post("/student/signup", validateStudentSignup, async (req, res) => {
   const { name, email, password } = req.body;
   const student = await prisma.student.create({
     data: {
@@ -18,7 +24,7 @@ authRouter.post("/student/signup", async (req, res) => {
   res.status(200).json({ message: "Signup successful", token });
 });
 
-authRouter.post("/student/signin", async (req, res) => {
+authRouter.post("/student/signin", validateStudentSignin, async (req, res) => {
   const { email, password } = req.body;
 
   const student = await prisma.student.findUnique({
@@ -39,7 +45,7 @@ authRouter.post("/student/signin", async (req, res) => {
   res.status(200).json({ message: "Signin successful", token });
 });
 
-authRouter.post("/teacher/signup", async (req, res) => {
+authRouter.post("/teacher/signup", validateTeacherSignup, async (req, res) => {
   const { name, email, password, subjectCode } = req.body;
   const teacher = await prisma.teacher.create({
     data: {
@@ -54,7 +60,7 @@ authRouter.post("/teacher/signup", async (req, res) => {
   res.status(200).json({ message: "Signup successful", token });
 });
 
-authRouter.post("/teacher/signin", async (req, res) => {
+authRouter.post("/teacher/signin", validateTeacherSignin, async (req, res) => {
   const { email, password } = req.body;
 
   const teacher = await prisma.teacher.findUnique({

@@ -1,18 +1,18 @@
 import { Router } from "express";
 import prisma from "../prisma";
-import { Course, Branch, Year } from "@prisma/client";
+import { stringToCourse, stringToBranch, stringToYear } from "../utils/enums";
+import { validateAssignment } from "../utils/validation";
 
 const assignmentRouter = Router();
 
-assignmentRouter.post("/", async (req, res) => {
-  const { id, role } = req.user;
-  if (role !== "TEACHER") {
-    return res.status(403).json({ message: "Not authorized" });
-  }
-
-  const { title, content, type } = req.body;
-  const dueDate = new Date(req.body.dueDate);
-  const [course, branch, year] = [Course.BTECH, Branch.CSE, Year.YEAR_4];
+assignmentRouter.post("/", validateAssignment, async (req, res) => {
+  const { id } = req.user;
+  const { title, description, dueDate } = req.body;
+  const [course, branch, year] = [
+    stringToCourse(req.body.course || "BTECH"),
+    stringToBranch(req.body.branch || "CSE"),
+    stringToYear(req.body.year || "YEAR_4"),
+  ];
 
   const students = await prisma.student.findMany({
     where: {
@@ -25,9 +25,8 @@ assignmentRouter.post("/", async (req, res) => {
   const assignment = await prisma.assignment.create({
     data: {
       title,
-      content,
-      type,
-      dueDate,
+      description,
+      dueDate: new Date(dueDate),
       teacherId: id,
       students: {
         connect: students.map((student) => ({
