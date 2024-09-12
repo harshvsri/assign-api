@@ -37,29 +37,24 @@ indexRouter.get("/", async (req, res) => {
         description: "Assignment management endpoints",
         subroutes: [
           {
-            path: "/assignment",
+            path: "/assignment/teacher/all",
             method: "GET",
             description: "Get all assignments",
           },
           {
-            path: "/assignment",
+            path: "/assignment/teacher/create",
             method: "POST",
             description: "Create a new assignment",
           },
           {
+            path: "/assignment/student/all",
+            method: "GET",
+            description: "Get all assignments",
+          },
+          {
             path: "/assignment/:id",
             method: "GET",
-            description: "Get a specific assignment",
-          },
-          {
-            path: "/assignment/:id",
-            method: "PUT",
-            description: "Update an assignment",
-          },
-          {
-            path: "/assignment/:id",
-            method: "DELETE",
-            description: "Delete an assignment",
+            description: "Get an assignment",
           },
         ],
       },

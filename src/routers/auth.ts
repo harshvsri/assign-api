@@ -21,7 +21,12 @@ authRouter.post("/student/signup", validateStudentSignup, async (req, res) => {
   });
 
   const token = createJWT(student);
-  res.status(200).json({ message: "Signup successful", token });
+  res.status(201).json({
+    data: {
+      token,
+      student: { id: student.id, name: student.name, email: student.email },
+    },
+  });
 });
 
 authRouter.post("/student/signin", validateStudentSignin, async (req, res) => {
@@ -33,16 +38,25 @@ authRouter.post("/student/signin", validateStudentSignin, async (req, res) => {
     },
   });
   if (!student) {
-    return res.status(404).json({ message: "Email not found" });
+    return res.status(404).json({
+      errors: [{ msg: "Email not found" }],
+    });
   }
 
   const match = await comparePassword(password, student.password);
   if (!match) {
-    return res.status(404).json({ message: "Wrong password" });
+    return res.status(404).json({
+      errors: [{ msg: "Wrong password" }],
+    });
   }
 
   const token = createJWT(student);
-  res.status(200).json({ message: "Signin successful", token });
+  res.status(200).json({
+    data: {
+      token,
+      student: { id: student.id, name: student.name, email: student.email },
+    },
+  });
 });
 
 authRouter.post("/teacher/signup", validateTeacherSignup, async (req, res) => {
@@ -57,7 +71,12 @@ authRouter.post("/teacher/signup", validateTeacherSignup, async (req, res) => {
   });
 
   const token = createJWT(teacher);
-  res.status(200).json({ message: "Signup successful", token });
+  res.status(201).json({
+    data: {
+      token,
+      teacher: { id: teacher.id, name: teacher.name, email: teacher.email },
+    },
+  });
 });
 
 authRouter.post("/teacher/signin", validateTeacherSignin, async (req, res) => {
@@ -69,16 +88,25 @@ authRouter.post("/teacher/signin", validateTeacherSignin, async (req, res) => {
     },
   });
   if (!teacher) {
-    return res.status(404).json({ message: "Email not found" });
+    return res.status(404).json({
+      errors: [{ msg: "Email not found" }],
+    });
   }
 
   const match = await comparePassword(password, teacher.password);
   if (!match) {
-    return res.status(404).json({ message: "Wrong password" });
+    return res.status(404).json({
+      errors: [{ msg: "Wrong password" }],
+    });
   }
 
   const token = createJWT(teacher);
-  res.status(200).json({ message: "Signin successful", token });
+  res.status(200).json({
+    data: {
+      token,
+      teacher: { id: teacher.id, name: teacher.name, email: teacher.email },
+    },
+  });
 });
 
 export default authRouter;

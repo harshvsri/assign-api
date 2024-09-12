@@ -21,7 +21,9 @@ export const validateStudentSignup = [
       where: { email },
     });
     if (student) {
-      return res.status(400).json({ errors: [{ msg: "Email already taken" }] });
+      return res.status(400).json({
+        errors: [{ msg: "Email already taken" }],
+      });
     }
     next();
   },
@@ -80,7 +82,7 @@ export const validateAssignment = [
   (req, res, next) => {
     const { role } = req.user;
     if (role !== "TEACHER") {
-      return res.status(403).json({ message: "Not authorized" });
+      return res.status(403).json({ errors: [{ msg: "Not authorized" }] });
     }
     next();
   },
