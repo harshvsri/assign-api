@@ -31,25 +31,30 @@ indexRouter.get("/", async (req, res) => {
             method: "POST",
             description: "Login teacher",
           },
+          {
+            path: "/auth/refresh",
+            method: "POST",
+            description: "Refresh access token",
+          },
         ],
       },
       assignment: {
         description: "Assignment management endpoints",
         subroutes: [
           {
-            path: "/assignment/teacher/all",
-            method: "GET",
-            description: "Get all assignments",
-          },
-          {
-            path: "/assignment/teacher/create",
+            path: "/assignment",
             method: "POST",
             description: "Create a new assignment",
           },
           {
-            path: "/assignment/student/all",
+            path: "/assignment/teacher",
             method: "GET",
-            description: "Get all assignments",
+            description: "Get all assignments of a teacher",
+          },
+          {
+            path: "/assignment/student",
+            method: "GET",
+            description: "Get all assignments of a student",
           },
           {
             path: "/assignment/:id",

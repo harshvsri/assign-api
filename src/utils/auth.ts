@@ -1,19 +1,50 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import prisma from "../prisma";
 
-export const createJWT = (user) => {
-  const token = jwt.sign(
-    {
-      id: user.id,
-      name: user.name,
-      role: user.role,
-    },
+const createAccessToken = (user) => {
+  return jwt.sign(
+    { id: user.id, name: user.name, role: user.role },
     process.env.JWT_SECRET,
-    {
-      expiresIn: "1h",
-    }
+    { expiresIn: "15m" }
   );
-  return token;
+};
+
+const createRefreshToken = (user) => {
+  return jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
+
+export const createTokens = (user) => {
+  return {
+    accessToken: createAccessToken(user),
+    refreshToken: createRefreshToken(user),
+  };
+};
+
+export const refreshAccessToken = async (refreshToken) => {
+  try {
+    const user = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+    let userData;
+    if (user.role === "STUDENT") {
+      userData = await prisma.student.findUnique({
+        where: { id: user.id },
+        select: { id: true, name: true, role: true },
+      });
+    } else {
+      userData = await prisma.teacher.findUnique({
+        where: { id: user.id },
+        select: { id: true, name: true, role: true },
+      });
+    }
+
+    return { accessToken: createAccessToken(userData) };
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 };
 
 export const hashPassword = async (password) => {
