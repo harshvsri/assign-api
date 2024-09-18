@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import prisma from "../prisma";
 
 const createAccessToken = (user) => {
   return jwt.sign(
@@ -26,21 +25,7 @@ export const createTokens = (user) => {
 export const refreshAccessToken = async (refreshToken) => {
   try {
     const user = jwt.verify(refreshToken, process.env.JWT_SECRET);
-
-    let userData;
-    if (user.role === "STUDENT") {
-      userData = await prisma.student.findUnique({
-        where: { id: user.id },
-        select: { id: true, name: true, role: true },
-      });
-    } else {
-      userData = await prisma.teacher.findUnique({
-        where: { id: user.id },
-        select: { id: true, name: true, role: true },
-      });
-    }
-
-    return { accessToken: createAccessToken(userData) };
+    return { accessToken: createAccessToken(user) };
   } catch (error) {
     console.error(error);
     return null;

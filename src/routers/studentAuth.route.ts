@@ -20,14 +20,7 @@ studentAuthRouter.post("/signup", validateStudentSignup, async (req, res) => {
 
   const { accessToken, refreshToken } = createTokens(student);
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
-
-  res.status(201).json({ accessToken });
+  res.status(201).json({ accessToken, refreshToken });
 });
 
 studentAuthRouter.post("/signin", validateStudentSignin, async (req, res) => {
@@ -53,14 +46,7 @@ studentAuthRouter.post("/signin", validateStudentSignin, async (req, res) => {
 
   const { accessToken, refreshToken } = createTokens(student);
 
-  res.cookie("refreshToken", refreshToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  });
-
-  res.status(200).json({ accessToken });
+  res.status(200).json({ accessToken, refreshToken });
 });
 
 export default studentAuthRouter;

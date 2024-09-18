@@ -54,18 +54,44 @@ assignmentRouter.get("/teacher", async (req, res) => {
 assignmentRouter.get("/student", async (req, res) => {
   const { id } = req.user;
 
-  const studentAssignments = await prisma.student.findUnique({
+  const studentDataWithAssignments = await prisma.student.findUnique({
     where: {
       id,
     },
-    include: {
-      assignments: true,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      course: true,
+      year: true,
+      branch: true,
+      assignments: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          dueDate: true,
+          teacher: {
+            select: {
+              name: true,
+            },
+          },
+          problems: {
+            select: {
+              id: true,
+              title: true,
+              difficulty: true,
+              description: true,
+            },
+          },
+        },
+      },
     },
   });
-  if (!studentAssignments) {
+  if (!studentDataWithAssignments) {
     return res.status(404).json({ errors: [{ msg: "No assignments found" }] });
   }
-  res.status(200).json({ data: { studentAssignments } });
+  res.status(200).json({ studentDataWithAssignments });
 });
 
 assignmentRouter.get("/:id", async (req, res) => {

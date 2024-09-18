@@ -38,26 +38,26 @@ indexRouter.get("/", async (req, res) => {
           },
         ],
       },
-      assignment: {
-        description: "Assignment management endpoints",
+      api: {
+        description: "API endpoints",
         subroutes: [
           {
-            path: "/assignment",
+            path: "/api/assignment",
             method: "POST",
             description: "Create a new assignment",
           },
           {
-            path: "/assignment/teacher",
+            path: "/api/assignment/teacher",
             method: "GET",
-            description: "Get all assignments of a teacher",
+            description: "Get all assignments created by teacher",
           },
           {
-            path: "/assignment/student",
+            path: "/api/assignment/student",
             method: "GET",
             description: "Get all assignments of a student",
           },
           {
-            path: "/assignment/:id",
+            path: "/api/assignment/:id",
             method: "GET",
             description: "Get an assignment",
           },

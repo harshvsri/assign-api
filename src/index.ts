@@ -2,12 +2,12 @@ import "dotenv/config";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import cookieParser from "cookie-parser";
-import indexRouter from "./routers";
-import authRouter from "./routers/auth";
-import assignmentRouter from "./routers/assignment";
+import indexRouter from "./routers/index.route";
+import authRouter from "./routers/auth.route";
+import apiRouter from "./routers/api.route";
 import { protectedRoute } from "./utils/auth";
 import { handleError } from "./utils/error";
+import { corsOptions } from "./utils/config";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -15,12 +15,11 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-app.use(cors());
-app.use(cookieParser());
+app.use(cors(corsOptions));
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
-app.use("/assignment", protectedRoute, assignmentRouter);
+app.use("/api", protectedRoute, apiRouter);
 
 app.use(handleError);
 app.listen(PORT, () => {
