@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import prisma from "../prisma";
 import { SubjectCode } from "@prisma/client";
 
@@ -89,6 +89,28 @@ export const validateAssignment = [
   body("title").notEmpty().withMessage("Title is required"),
   body("description").notEmpty().withMessage("Description is required"),
   body("dueDate").isDate().withMessage("Invalid due date"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+export const validateStudent = [
+  query("id").isString().withMessage("Invalid student id"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+export const validateTeacher = [
+  query("id").isString().withMessage("Invalid teacher id"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

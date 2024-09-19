@@ -1,5 +1,5 @@
 export const corsOptions = {
-  origin: "*", // Replace with your frontend's URL
+  origin: ["http://localhost:5173", "http://localhost:5174"],
   methods: "GET,POST,PUT,DELETE",
-  credentials: true, // Allow cookies to be sent across domains
+  credentials: true,
 };

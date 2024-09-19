@@ -47,19 +47,14 @@ indexRouter.get("/", async (req, res) => {
             description: "Create a new assignment",
           },
           {
-            path: "/api/assignment/teacher",
+            path: "/api/assignment/teacher?id=teacherId",
             method: "GET",
             description: "Get all assignments created by teacher",
           },
           {
-            path: "/api/assignment/student",
+            path: "/api/assignment/student?id=studentId",
             method: "GET",
             description: "Get all assignments of a student",
-          },
-          {
-            path: "/api/assignment/:id",
-            method: "GET",
-            description: "Get an assignment",
           },
         ],
       },
