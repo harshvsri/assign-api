@@ -54,6 +54,18 @@ export const validateTeacherSignup = [
     }
     next();
   },
+  async (req, res, next) => {
+    const { email } = req.body;
+    const teacher = await prisma.teacher.findUnique({
+      where: { email },
+    });
+    if (teacher) {
+      return res.status(400).json({
+        errors: [{ msg: "Email already taken" }],
+      });
+    }
+    next();
+  },
 ];
 
 export const validateTeacherSignin = [

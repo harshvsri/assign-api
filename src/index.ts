@@ -24,6 +24,6 @@ app.use("/api", protectedRoute, apiRouter);
 
 app.use(handleError);
 app.listen(PORT, () => {
-  console.log(`[server] running at http://localhost:${PORT}`);
+  console.log(`[server] running at http://0.0.0.0:${PORT}`);
   checkDbConnection();
 });

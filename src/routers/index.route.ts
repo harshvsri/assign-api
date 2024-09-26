@@ -56,6 +56,16 @@ indexRouter.get("/", async (req, res) => {
             method: "GET",
             description: "Get all assignments of a student",
           },
+          {
+            path: "/api/student?id=studentId",
+            method: "GET",
+            description: "Get a specific student by ID",
+          },
+          {
+            path: "/api/teacher?id=teacherId",
+            method: "GET",
+            description: "Get a specific teacher by ID",
+          },
         ],
       },
     },

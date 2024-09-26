@@ -43,22 +43,8 @@ assignmentRouter.post("/", validateAssignment, async (req, res) => {
 });
 
 assignmentRouter.get("/teacher", validateTeacher, async (req, res) => {
-  const { id } = req.params;
-  const assignments = await prisma.assignment.findMany({
-    where: {
-      teacherId: id,
-    },
-  });
-  if (!assignments) {
-    return res.status(404).json({ errors: [{ msg: "No assignments found" }] });
-  }
-  res.status(200).json({ data: { assignments } });
-});
-
-assignmentRouter.get("/student", validateStudent, async (req, res) => {
-  const { id } = req.params;
-
-  const assignments = await prisma.student.findUnique({
+  const { id } = req.query;
+  const teacher = await prisma.teacher.findUnique({
     where: {
       id,
     },
@@ -66,10 +52,23 @@ assignmentRouter.get("/student", validateStudent, async (req, res) => {
       assignments: true,
     },
   });
-  if (!assignments) {
-    return res.status(404).json({ errors: [{ msg: "No assignments found" }] });
+  if (!teacher) {
+    return res.status(404).json({ errors: [{ msg: "No such teacher found" }] });
   }
-  res.status(200).json({ assignments });
+  res.status(200).json({ assignments: teacher.assignments });
+});
+
+assignmentRouter.get("/student", validateStudent, async (req, res) => {
+  const { id } = req.query;
+  const student = await prisma.student.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      assignments: true,
+    },
+  });
+  res.status(200).json({ assignments: student.assignments });
 });
 
 export default assignmentRouter;
