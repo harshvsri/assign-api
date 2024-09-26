@@ -51,7 +51,7 @@ model Teacher {
   email       String       @unique
   name        String
   password    String
-  subjectCode SubjectCode
+  subjectCode SubjectCode  @default(CS_701)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   role        Role         @default(TEACHER)

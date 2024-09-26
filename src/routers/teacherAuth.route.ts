@@ -14,7 +14,6 @@ teacherAuthRouter.post("/signup", validateTeacherSignup, async (req, res) => {
       name,
       email,
       password: await hashPassword(password),
-      subjectCode,
     },
   });
 
