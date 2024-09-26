@@ -92,7 +92,6 @@ model Problem {
   id           String            @id @default(cuid())
   title        String
   description  String
-  starterCode  String
   examples     Example[]
   testCases    TestCase[]
   difficulty   ProblemDifficulty @default(EASY)

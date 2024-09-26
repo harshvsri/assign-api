@@ -54,15 +54,6 @@ export const validateTeacherSignup = [
     }
     next();
   },
-  (req, res, next) => {
-    const { subjectCode } = req.body;
-    if (!Object.values(SubjectCode).includes(subjectCode)) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Invalid subject code" }] });
-    }
-    next();
-  },
 ];
 
 export const validateTeacherSignin = [

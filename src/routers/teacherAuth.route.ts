@@ -8,7 +8,7 @@ import {
 const teacherAuthRouter = Router();
 
 teacherAuthRouter.post("/signup", validateTeacherSignup, async (req, res) => {
-  const { name, email, password, subjectCode } = req.body;
+  const { name, email, password } = req.body;
   const teacher = await prisma.teacher.create({
     data: {
       name,
