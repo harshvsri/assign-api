@@ -8,6 +8,7 @@ import apiRouter from "./routers/api.route";
 import { protectedRoute } from "./utils/auth";
 import { handleError } from "./utils/error";
 import { corsOptions } from "./utils/config";
+import checkDbConnection from "./checkDb";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
@@ -24,4 +25,5 @@ app.use("/api", protectedRoute, apiRouter);
 app.use(handleError);
 app.listen(PORT, () => {
   console.log(`[server] running at http://localhost:${PORT}`);
+  checkDbConnection();
 });
